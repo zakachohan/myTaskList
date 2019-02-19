@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Auth;
 use App\Task;
 use Illuminate\Http\Request;
+use DB;
 
 class TaskController extends Controller
 {
@@ -50,6 +51,7 @@ class TaskController extends Controller
         $task = Task::create([
             'name'        => request('name'),
             'description' => request('description'),
+            'status' => request('status'),
             'user_id'     => Auth::user()->id
         ]);
 
@@ -97,6 +99,7 @@ class TaskController extends Controller
 
         $task->name = request('name');
         $task->description = request('description');
+        $task->status = request('status');
         $task->save();
 
         return response()->json([
@@ -115,6 +118,29 @@ class TaskController extends Controller
         $task->delete();
         return response()->json([
             'message' => 'Task deleted successfully!'
+        ], 200);
+    }
+    /**
+     * Display a listing of the resource of last 1 hour records.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function history()
+    {        
+        $latestTasks = DB::select( DB::raw("select 
+             (select count(*) 
+                    from tasks t 
+                    where tasks.updated_at >= t.updated_at and t.status = 0  )  countt
+
+            FROM tasks
+            WHERE updated_at > DATE_ADD( NOW(), INTERVAL -2 HOUR )
+            and status = 0
+            order by updated_at ASC
+             ") ); 
+         
+
+        return response()->json([
+            'latestTasks'    => $latestTasks
         ], 200);
     }
 }

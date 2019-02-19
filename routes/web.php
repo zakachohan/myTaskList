@@ -20,3 +20,4 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('/task', 'TaskController');
+Route::get('/history', 'TaskController@history')->name('history');

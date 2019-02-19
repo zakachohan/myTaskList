@@ -24,6 +24,9 @@
                                     Description
                                 </th>
                                 <th>
+                                    Status
+                                </th>
+                                <th>
                                     Action
                                 </th>
                             </tr>
@@ -34,6 +37,10 @@
                                 </td>
                                 <td>
                                     {{ task.description }}
+                                </td>
+                                <td>
+                                    <span v-if="task.status == 0">Pending   </span>
+                                    <span v-else>Completed</span>
                                 </td>
                                 <td>
                                     <button @click="initUpdate(index)" class="btn btn-success btn-xs">Edit</button>
@@ -50,7 +57,7 @@
         
                     <div class="panel-body">
                         <h2>Last Hour Data</h2>
-	                   <line-chart></line-chart>
+	                     <line-chart></line-chart>
                     </div>
         
         
@@ -80,6 +87,11 @@
                             <label for="description">Description:</label>
                             <textarea name="description" id="description" cols="30" rows="5" class="form-control"
                                       placeholder="Task Description" v-model="task.description"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Description:</label>
+                            <input type="text" name="name" id="name" placeholder="Status" class="form-control"
+                                   v-model="task.status">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -116,6 +128,11 @@
                             <textarea cols="30" rows="5" class="form-control"
                                       placeholder="Task Description" v-model="update_task.description"></textarea>
                         </div>
+                        <div class="form-group">
+                            <label for="description">Description:</label>
+                            <input type="text" name="name" id="name" placeholder="Status" class="form-control"
+                                   v-model="task.status">
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -130,20 +147,18 @@
 
 <script>
 
+ 
+import LineChart from '../LineChart' 
 
-import { LineChart } from 'vue-chartjs';
 
-
-
-    export default { 
-    
-        extends: LineChart as LineChart,
-        components: { LineChart },
+    export default {  
+      components: { LineChart },
         data(){
             return {
                 task: {
                     name: '',
-                    description: ''
+                    description: '',
+                    status: 0
                 },
                 errors: [],
                 tasks: [],
@@ -153,17 +168,6 @@ import { LineChart } from 'vue-chartjs';
         mounted()
         {
             this.readTasks();
-            this.renderChart({
-              labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-              datasets: [
-                {
-                  label: 'Data One',
-                  backgroundColor: '#f87979',
-                  data: [40, 39, 10, 40, 39, 80, 40]
-                }
-              ]
-            }, {responsive: true, maintainAspectRatio: false});
-
         },
         methods: {
             initAddTask()
@@ -172,9 +176,10 @@ import { LineChart } from 'vue-chartjs';
             },
             createTask()
             {
-                axios.post('/webscope/tasks/public/task', {
+                axios.post('/tasks/public/task', {
                     name: this.task.name,
                     description: this.task.description,
+                    status: this.task.status,
                 })
                     .then(response => {
 
@@ -200,10 +205,12 @@ import { LineChart } from 'vue-chartjs';
             {
                 this.task.name = '';
                 this.task.description = '';
+                this.task.status = 0;
+
             },
             readTasks()
             {
-                axios.get('/webscope/tasks/public/task')
+                axios.get('/tasks/public/task')
                     .then(response => {
 
                         this.tasks = response.data.tasks;
@@ -218,9 +225,10 @@ import { LineChart } from 'vue-chartjs';
             },
             updateTask()
             {
-                axios.patch('/webscope/tasks/public/task/' + this.update_task.id, {
+                axios.patch('/tasks/public/task/' + this.update_task.id, {
                     name: this.update_task.name,
                     description: this.update_task.description,
+                    status: this.update_task.status,
                 })
                     .then(response => {
 
@@ -243,7 +251,7 @@ import { LineChart } from 'vue-chartjs';
                 let conf = confirm("Do you ready want to delete this task?");
                 if (conf === true) {
 
-                    axios.delete('/webscope/tasks/public/task/' + this.tasks[index].id)
+                    axios.delete('/tasks/public/task/' + this.tasks[index].id)
                         .then(response => {
 
                             this.tasks.splice(index, 1);
