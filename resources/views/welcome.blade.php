@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>Tasks  (Webscope)</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
@@ -80,14 +80,16 @@
             @endif
 
             <div class="content">
-                <h2 >
-                    Welcome to Tasks (By Webscope)
-                </h2>
-
-                <div class="links">
-                    <a href="{{ route('login') }}">Login</a>
-                    <a href="{{ route('register') }}">Register</a>
-                </div>
+				@auth
+					<h2 >
+						Welcome to Tasks (By Webscope)
+					</h2>
+				@else
+					<div class="links">
+						<a href="{{ route('login') }}">Login</a>
+						<a href="{{ route('register') }}">Register</a>
+					</div>
+                @endauth
             </div>
         </div>
     </body>

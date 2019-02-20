@@ -4,7 +4,7 @@
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <button @click="initAddTask()" class="btn btn-primary btn-xs pull-right">
+                        <button @click="initAddTask()" class="btn btn-primary btn-xs float-right">
                             + Add New Task
                         </button>
                         My Tasks

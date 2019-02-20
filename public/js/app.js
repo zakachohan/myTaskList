@@ -69978,7 +69978,7 @@ var render = function() {
             _c(
               "button",
               {
-                staticClass: "btn btn-primary btn-xs pull-right",
+                staticClass: "btn btn-primary btn-xs float-right",
                 on: {
                   click: function($event) {
                     return _vm.initAddTask()
@@ -82589,7 +82589,8 @@ __webpack_require__.r(__webpack_exports__);
         datasets: [{
           label: 'Last Hour Data',
           backgroundColor: '#f87979',
-          data: response.data.latestTasks.count
+          // data: response.data.latestTasks.count
+          data: [4, 2, 12, 9, 1, 0, 3, 8, 0, 2, 1, 5]
         }]
       }); //this.tasks = response.data.tasks;
 

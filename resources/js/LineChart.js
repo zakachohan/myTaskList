@@ -29,7 +29,8 @@ export default ({
                     {
                       label: 'Last Hour Data',
                       backgroundColor: '#f87979',
-                      data: response.data.latestTasks.count
+                     // data: response.data.latestTasks.count
+					  data: [4, 2, 12, 9, 1, 0, 3, 8, 0, 2, 1, 5]
                     }
                   ]
                 })
