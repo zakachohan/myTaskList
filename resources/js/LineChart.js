@@ -19,7 +19,7 @@ export default ({
             }
         }
       
-      axios.get('/tasks/public/history')
+      axios.get('/history')
         .then(response => {
           
               this.renderChart({

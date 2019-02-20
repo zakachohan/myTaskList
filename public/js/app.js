@@ -1911,6 +1911,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
@@ -1938,7 +1948,7 @@ __webpack_require__.r(__webpack_exports__);
     createTask: function createTask() {
       var _this = this;
 
-      axios.post('/tasks/public/task', {
+      axios.post('/task', {
         name: this.task.name,
         description: this.task.description,
         status: this.task.status
@@ -1968,7 +1978,7 @@ __webpack_require__.r(__webpack_exports__);
     readTasks: function readTasks() {
       var _this2 = this;
 
-      axios.get('/tasks/public/task').then(function (response) {
+      axios.get('/task').then(function (response) {
         _this2.tasks = response.data.tasks;
       });
     },
@@ -1980,7 +1990,7 @@ __webpack_require__.r(__webpack_exports__);
     updateTask: function updateTask() {
       var _this3 = this;
 
-      axios.patch('/tasks/public/task/' + this.update_task.id, {
+      axios.patch('/task/' + this.update_task.id, {
         name: this.update_task.name,
         description: this.update_task.description,
         status: this.update_task.status
@@ -2004,7 +2014,7 @@ __webpack_require__.r(__webpack_exports__);
       var conf = confirm("Do you ready want to delete this task?");
 
       if (conf === true) {
-        axios.delete('/tasks/public/task/' + this.tasks[index].id).then(function (response) {
+        axios.delete('/task/' + this.tasks[index].id).then(function (response) {
           _this4.tasks.splice(index, 1);
         }).catch(function (error) {});
       }
@@ -20013,7 +20023,7 @@ for (var name in colorNames) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /* MIT license */
-var convert = __webpack_require__(/*! color-convert */ "./node_modules/chartjs-color/node_modules/color-convert/index.js");
+var convert = __webpack_require__(/*! color-convert */ "./node_modules/color-convert/index.js");
 var string = __webpack_require__(/*! chartjs-color-string */ "./node_modules/chartjs-color-string/color-string.js");
 
 var Color = function (obj) {
@@ -20501,10 +20511,10 @@ module.exports = Color;
 
 /***/ }),
 
-/***/ "./node_modules/chartjs-color/node_modules/color-convert/conversions.js":
-/*!******************************************************************************!*\
-  !*** ./node_modules/chartjs-color/node_modules/color-convert/conversions.js ***!
-  \******************************************************************************/
+/***/ "./node_modules/color-convert/conversions.js":
+/*!***************************************************!*\
+  !*** ./node_modules/color-convert/conversions.js ***!
+  \***************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -21210,14 +21220,14 @@ for (var key in cssKeywords) {
 
 /***/ }),
 
-/***/ "./node_modules/chartjs-color/node_modules/color-convert/index.js":
-/*!************************************************************************!*\
-  !*** ./node_modules/chartjs-color/node_modules/color-convert/index.js ***!
-  \************************************************************************/
+/***/ "./node_modules/color-convert/index.js":
+/*!*********************************************!*\
+  !*** ./node_modules/color-convert/index.js ***!
+  \*********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-var conversions = __webpack_require__(/*! ./conversions */ "./node_modules/chartjs-color/node_modules/color-convert/conversions.js");
+var conversions = __webpack_require__(/*! ./conversions */ "./node_modules/color-convert/conversions.js");
 
 var convert = function() {
    return new Converter();
@@ -70165,35 +70175,52 @@ var render = function() {
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group" }, [
                   _c("label", { attrs: { for: "description" } }, [
-                    _vm._v("Description:")
+                    _vm._v("Status:")
                   ]),
                   _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.task.status,
-                        expression: "task.status"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      type: "text",
-                      name: "name",
-                      id: "name",
-                      placeholder: "Status"
-                    },
-                    domProps: { value: _vm.task.status },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.task.status,
+                          expression: "task.status"
                         }
-                        _vm.$set(_vm.task, "status", $event.target.value)
+                      ],
+                      staticClass: "form-control",
+                      attrs: { name: "status", id: "status" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.task,
+                            "status",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
                       }
-                    }
-                  })
+                    },
+                    [
+                      _c("option", { attrs: { value: "0" } }, [
+                        _vm._v("Pending ")
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "1" } }, [
+                        _vm._v("Completed")
+                      ])
+                    ]
+                  )
                 ])
               ]),
               _vm._v(" "),
@@ -70314,35 +70341,52 @@ var render = function() {
                 _vm._v(" "),
                 _c("div", { staticClass: "form-group" }, [
                   _c("label", { attrs: { for: "description" } }, [
-                    _vm._v("Description:")
+                    _vm._v("Status:")
                   ]),
                   _vm._v(" "),
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.task.status,
-                        expression: "task.status"
-                      }
-                    ],
-                    staticClass: "form-control",
-                    attrs: {
-                      type: "text",
-                      name: "name",
-                      id: "name",
-                      placeholder: "Status"
-                    },
-                    domProps: { value: _vm.task.status },
-                    on: {
-                      input: function($event) {
-                        if ($event.target.composing) {
-                          return
+                  _c(
+                    "select",
+                    {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.update_task.status,
+                          expression: "update_task.status"
                         }
-                        _vm.$set(_vm.task, "status", $event.target.value)
+                      ],
+                      staticClass: "form-control",
+                      attrs: { name: "status", id: "status" },
+                      on: {
+                        change: function($event) {
+                          var $$selectedVal = Array.prototype.filter
+                            .call($event.target.options, function(o) {
+                              return o.selected
+                            })
+                            .map(function(o) {
+                              var val = "_value" in o ? o._value : o.value
+                              return val
+                            })
+                          _vm.$set(
+                            _vm.update_task,
+                            "status",
+                            $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          )
+                        }
                       }
-                    }
-                  })
+                    },
+                    [
+                      _c("option", { attrs: { value: "0" } }, [
+                        _vm._v("Pending ")
+                      ]),
+                      _vm._v(" "),
+                      _c("option", { attrs: { value: "1" } }, [
+                        _vm._v("Completed")
+                      ])
+                    ]
+                  )
                 ])
               ]),
               _vm._v(" "),
@@ -82539,7 +82583,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     }
 
-    axios.get('/tasks/public/history').then(function (response) {
+    axios.get('/history').then(function (response) {
       _this.renderChart({
         labels: arr,
         datasets: [{
@@ -82657,15 +82701,14 @@ if (token) {
 /*!******************************************!*\
   !*** ./resources/js/components/Task.vue ***!
   \******************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Task_vue_vue_type_template_id_e9a53c20___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Task.vue?vue&type=template&id=e9a53c20& */ "./resources/js/components/Task.vue?vue&type=template&id=e9a53c20&");
 /* harmony import */ var _Task_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Task.vue?vue&type=script&lang=js& */ "./resources/js/components/Task.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _Task_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _Task_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -82695,7 +82738,7 @@ component.options.__file = "resources/js/components/Task.vue"
 /*!*******************************************************************!*\
   !*** ./resources/js/components/Task.vue?vue&type=script&lang=js& ***!
   \*******************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -82741,8 +82784,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! E:\xampp\htdocs\webscope\tasks\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! E:\xampp\htdocs\webscope\tasks\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! E:\xampp\htdocs\webscope\abc\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! E:\xampp\htdocs\webscope\abc\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

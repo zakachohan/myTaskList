@@ -89,9 +89,13 @@
                                       placeholder="Task Description" v-model="task.description"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="description">Description:</label>
-                            <input type="text" name="name" id="name" placeholder="Status" class="form-control"
-                                   v-model="task.status">
+                            <label for="description">Status:</label>
+								<select class="form-control" name="status" id="status" v-model="task.status">
+									<option value="0"  >Pending </option>
+									<option value="1"  >Completed</option>									
+								</select>							
+								   
+
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -129,9 +133,15 @@
                                       placeholder="Task Description" v-model="update_task.description"></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="description">Description:</label>
-                            <input type="text" name="name" id="name" placeholder="Status" class="form-control"
-                                   v-model="task.status">
+                            <label for="description">Status:</label>
+                            
+							
+								<select class="form-control" name="status" id="status" v-model="update_task.status">
+									<option value="0"  >Pending </option>
+									<option value="1"  >Completed</option>									
+								</select>							
+								   
+								   
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -176,7 +186,7 @@ import LineChart from '../LineChart'
             },
             createTask()
             {
-                axios.post('/tasks/public/task', {
+                axios.post('/task', {
                     name: this.task.name,
                     description: this.task.description,
                     status: this.task.status,
@@ -210,7 +220,7 @@ import LineChart from '../LineChart'
             },
             readTasks()
             {
-                axios.get('/tasks/public/task')
+                axios.get('/task')
                     .then(response => {
 
                         this.tasks = response.data.tasks;
@@ -225,7 +235,7 @@ import LineChart from '../LineChart'
             },
             updateTask()
             {
-                axios.patch('/tasks/public/task/' + this.update_task.id, {
+                axios.patch('/task/' + this.update_task.id, {
                     name: this.update_task.name,
                     description: this.update_task.description,
                     status: this.update_task.status,
@@ -251,7 +261,7 @@ import LineChart from '../LineChart'
                 let conf = confirm("Do you ready want to delete this task?");
                 if (conf === true) {
 
-                    axios.delete('/tasks/public/task/' + this.tasks[index].id)
+                    axios.delete('/task/' + this.tasks[index].id)
                         .then(response => {
 
                             this.tasks.splice(index, 1);
